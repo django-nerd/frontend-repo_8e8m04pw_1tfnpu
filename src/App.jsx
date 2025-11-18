@@ -1,7 +1,31 @@
+import { useEffect, useState } from 'react'
 import Hero from './components/Hero'
 import ProductList from './components/ProductList'
 
 function App() {
+  const [cartCount, setCartCount] = useState(0)
+
+  useEffect(() => {
+    const stored = localStorage.getItem('cart_id')
+    if (stored) updateCartCount(stored)
+    const i = setInterval(()=>{
+      const id = localStorage.getItem('cart_id')
+      if (id) updateCartCount(id)
+    }, 4000)
+    return ()=> clearInterval(i)
+  }, [])
+
+  async function updateCartCount(id){
+    try {
+      const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+      const res = await fetch(`${baseUrl}/api/cart/${id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setCartCount(data.items?.length || 0)
+      }
+    } catch {}
+  }
+
   return (
     <div className="min-h-screen bg-[#fde6d8]">
       <header className="sticky top-0 z-10 backdrop-blur bg-[#fde6d8]/70 border-b border-emerald-100">
@@ -17,7 +41,7 @@ function App() {
           </nav>
           <div className="flex items-center gap-3">
             <button className="px-3 py-1.5 rounded-full border border-emerald-200 text-emerald-900/80">Login</button>
-            <button className="px-3 py-1.5 rounded-full bg-emerald-700 text-white">Cart (0)</button>
+            <button className="px-3 py-1.5 rounded-full bg-emerald-700 text-white">Cart ({cartCount})</button>
           </div>
         </div>
       </header>
@@ -51,17 +75,17 @@ function App() {
           <div>
             <h4 className="font-semibold mb-2">Shop</h4>
             <ul className="space-y-1 text-emerald-100/80">
-              <li>Face Care</li>
-              <li>Hair Care</li>
-              <li>Body Care</li>
+              <li><a href="#products" className="hover:underline">Face Care</a></li>
+              <li><a href="#products" className="hover:underline">Hair Care</a></li>
+              <li><a href="#products" className="hover:underline">Body Care</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-2">Support</h4>
             <ul className="space-y-1 text-emerald-100/80">
-              <li>Contact</li>
-              <li>Shipping</li>
-              <li>Returns</li>
+              <li><button className="hover:underline">Contact</button></li>
+              <li><button className="hover:underline">Shipping</button></li>
+              <li><button className="hover:underline">Returns</button></li>
             </ul>
           </div>
           <div>

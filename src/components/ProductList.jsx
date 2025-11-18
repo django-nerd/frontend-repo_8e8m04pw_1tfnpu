@@ -7,6 +7,10 @@ export default function ProductList() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  // cart state
+  const [cartId, setCartId] = useState(localStorage.getItem('cart_id') || '')
+  const [cart, setCart] = useState({ items: [], total: 0 })
+
   // filters state
   const [q, setQ] = useState('')
   const [category, setCategory] = useState('')
@@ -14,6 +18,17 @@ export default function ProductList() {
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [sort, setSort] = useState('')
+
+  useEffect(() => {
+    if (!cartId) {
+      Api.startCart().then((r) => {
+        setCartId(r.cart_id)
+        localStorage.setItem('cart_id', r.cart_id)
+      }).catch(()=>{})
+    } else {
+      refreshCart(cartId)
+    }
+  }, [])
 
   useEffect(() => {
     load()
@@ -39,6 +54,15 @@ export default function ProductList() {
     }
   }
 
+  async function refreshCart(id){
+    try {
+      const c = await Api.getCart(id)
+      setCart(c)
+    } catch (e) {
+      // ignore
+    }
+  }
+
   const categories = ['Face Care', 'Hair Care', 'Body Care']
   const ingredients = ['Sandalwood', 'Turmeric', 'Neem', 'Tulsi', 'Amla', 'Rose']
 
@@ -48,8 +72,32 @@ export default function ProductList() {
     return products.filter(p => p.name.toLowerCase().includes(t) || p.description.toLowerCase().includes(t))
   }, [products, q])
 
-  function addToCart(p) {
-    alert(`Added to cart: ${p.name}`)
+  async function addToCart(p) {
+    if (!cartId) return
+    try {
+      await Api.addToCart({ cart_id: cartId, product_id: p.id, qty: 1 })
+      await refreshCart(cartId)
+    } catch (e) {
+      alert('Failed to add to cart')
+    }
+  }
+
+  async function handleCheckout(){
+    if (!cartId) return
+    try {
+      const email = prompt('Enter email for order confirmation (optional)') || undefined
+      const r = await Api.checkout({ cart_id: cartId, email })
+      alert(`Order placed! ID: ${r.order_id || 'mock-order'}`)
+      // reset cart
+      localStorage.removeItem('cart_id')
+      setCartId('')
+      setCart({ items: [], total: 0 })
+      const started = await Api.startCart()
+      setCartId(started.cart_id)
+      localStorage.setItem('cart_id', started.cart_id)
+    } catch (e) {
+      alert(e.message || 'Checkout failed')
+    }
   }
 
   return (
@@ -82,6 +130,15 @@ export default function ProductList() {
               <option value="rating">Rating</option>
             </select>
             <button onClick={load} className="px-4 py-2 bg-emerald-700 text-white rounded-lg">Apply</button>
+          </div>
+        </div>
+
+        {/* Cart bar */}
+        <div className="mt-6 p-4 bg-white/70 border border-emerald-100 rounded-xl flex items-center justify-between">
+          <div className="text-emerald-900/90">Items: {cart.items.length} • Total: ${cart.total?.toFixed?.(2) ?? cart.total}</div>
+          <div className="flex gap-2">
+            <button onClick={()=>refreshCart(cartId)} className="px-3 py-2 rounded-lg border border-emerald-200">Refresh</button>
+            <button onClick={handleCheckout} className="px-3 py-2 rounded-lg bg-emerald-700 text-white">Checkout</button>
           </div>
         </div>
 
