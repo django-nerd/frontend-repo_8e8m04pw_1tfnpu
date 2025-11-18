@@ -1,71 +1,79 @@
+import Hero from './components/Hero'
+import ProductList from './components/ProductList'
+
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
-
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
-
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
+    <div className="min-h-screen bg-[#fde6d8]">
+      <header className="sticky top-0 z-10 backdrop-blur bg-[#fde6d8]/70 border-b border-emerald-100">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a href="/" className="flex items-center gap-2">
+            <span className="h-8 w-8 rounded-full bg-emerald-700 inline-block" />
+            <span className="font-serif text-xl text-emerald-900">AyurVeda Beauty</span>
+          </a>
+          <nav className="hidden md:flex items-center gap-6 text-emerald-900/80">
+            <a href="#products" className="hover:text-emerald-900">Shop</a>
+            <a href="#philosophy" className="hover:text-emerald-900">Philosophy</a>
+            <a href="/test" className="hover:text-emerald-900">API Test</a>
+          </nav>
+          <div className="flex items-center gap-3">
+            <button className="px-3 py-1.5 rounded-full border border-emerald-200 text-emerald-900/80">Login</button>
+            <button className="px-3 py-1.5 rounded-full bg-emerald-700 text-white">Cart (0)</button>
           </div>
         </div>
-      </div>
+      </header>
+
+      <main>
+        <Hero />
+        <section id="philosophy" className="bg-[#fffaf4]">
+          <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-8">
+            <div className="md:col-span-2">
+              <h2 className="text-2xl md:text-3xl font-serif text-emerald-900">Rooted in Ayurveda</h2>
+              <p className="mt-3 text-emerald-800/80">Our formulas honor ancient wisdom with modern safety. We source herbs ethically and craft small batches to preserve potency and purity.</p>
+              <ul className="mt-6 grid sm:grid-cols-2 gap-4 text-emerald-900/90">
+                <li className="p-4 bg-white/70 border border-emerald-100 rounded-xl">Sulfate & Paraben Free</li>
+                <li className="p-4 bg-white/70 border border-emerald-100 rounded-xl">Cruelty Free</li>
+                <li className="p-4 bg-white/70 border border-emerald-100 rounded-xl">Sustainably Sourced</li>
+                <li className="p-4 bg-white/70 border border-emerald-100 rounded-xl">Dermatologically Tested</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl bg-[url('https://images.unsplash.com/photo-1760764541302-e3955fbc6b2b?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxjZXJhbWljJTIwcG90dGVyeSUyMGhhbmRtYWRlfGVufDB8MHx8fDE3NjM0MTE5NzJ8MA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80')] bg-cover bg-center min-h-[240px]" />
+          </div>
+        </section>
+        <ProductList />
+      </main>
+
+      <footer className="bg-emerald-900 text-emerald-50">
+        <div className="max-w-7xl mx-auto px-6 py-10 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div>
+            <h4 className="font-semibold mb-2">AyurVeda Beauty</h4>
+            <p className="text-emerald-100/70">Pure, natural, and effective Ayurvedic skincare.</p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Shop</h4>
+            <ul className="space-y-1 text-emerald-100/80">
+              <li>Face Care</li>
+              <li>Hair Care</li>
+              <li>Body Care</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Support</h4>
+            <ul className="space-y-1 text-emerald-100/80">
+              <li>Contact</li>
+              <li>Shipping</li>
+              <li>Returns</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Newsletter</h4>
+            <p className="text-emerald-100/70 mb-2">Join for tips and special offers.</p>
+            <div className="flex gap-2">
+              <input placeholder="Email" className="px-3 py-2 rounded bg-emerald-800/40 border border-emerald-700 text-emerald-50 placeholder-emerald-200/60 flex-1" />
+              <button className="px-3 py-2 rounded bg-emerald-600 hover:bg-emerald-500">Join</button>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
